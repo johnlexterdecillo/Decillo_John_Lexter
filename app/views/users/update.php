@@ -232,7 +232,7 @@
     <div class="container">
     <div class="card">
         <div class="card-header">
-            <h1 class="title">🔧 Update Terraria User</h1>
+            <h1 class="title">🔧 Update Terraria player</h1>
         </div>
         <div class="card-body">
             <form action="<?= site_url('users/update/' . $user['id']) ?>" method="POST">

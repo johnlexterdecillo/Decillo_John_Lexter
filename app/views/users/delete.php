@@ -210,7 +210,7 @@
     <div class="container">
         <div class="card">
             <div class="card-header">
-                <h1>🗑️ Delete Terraria User</h1>
+                <h1>🗑️ Delete Terraria Player</h1>
             </div>
             <div class="card-body">
                 <p>Are you sure you want to banish <strong><?= $user['username'] ?></strong> (<?= $user['email'] ?>) from this Terraria world?</p>

@@ -232,7 +232,7 @@
     <div class="container">
     <div class="card">
         <div class="card-header">
-            <h1 class="title">⚔️ Create Terraria User</h1>
+            <h1 class="title">⚔️ Create Terraria Player</h1>
         </div>
         <div class="card-body">
             <form action="<?= site_url('users/create') ?>" method="POST">

@@ -262,9 +262,9 @@
     <div class="container">
     <div class="card">
     <div class="card-header">
-        <h1 class="title">👥 Terraria Users</h1>
+        <h1 class="title">👥 Terraria Players</h1>
         <div class="actions">
-            <a href="<?= site_url('users/create') ?>" class="btn btn-primary">⚔️ Create User</a>
+            <a href="<?= site_url('users/create') ?>" class="btn btn-primary">⚔️ Create Player</a>
         </div>
     </div>
     <div class="table-wrapper">
