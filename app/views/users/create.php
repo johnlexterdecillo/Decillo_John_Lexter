@@ -1,256 +1,227 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Create Terraria User - LavaLust</title>
+    <title>Create User Profile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-        
-        * { 
-            box-sizing: border-box; 
-        }
-        
-        body { 
-            margin: 0; 
-            font-family: 'Press Start 2P', monospace; 
-            color: #e94560; 
-            background: #1a1a2e;
-            background-image: 
-                radial-gradient(circle at 20% 80%, #16213e 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, #0f3460 0%, transparent 50%),
-                radial-gradient(circle at 40% 40%, #533483 0%, transparent 50%);
-            image-rendering: pixelated;
-            image-rendering: -moz-crisp-edges;
-            image-rendering: crisp-edges;
-        }
-        
-        .terraria-bg { 
-            position: fixed; 
-            inset: 0; 
-            z-index: -1; 
-            pointer-events: none; 
-            background:
-                repeating-linear-gradient(
-                    0deg,
-                    transparent,
-                    transparent 2px,
-                    rgba(255, 255, 255, 0.03) 2px,
-                    rgba(255, 255, 255, 0.03) 4px
-                ),
-                repeating-linear-gradient(
-                    90deg,
-                    transparent,
-                    transparent 2px,
-                    rgba(255, 255, 255, 0.03) 2px,
-                    rgba(255, 255, 255, 0.03) 4px
-                );
-        }
-        
-        .container { 
-            max-width: 800px; 
-            margin: 2rem auto; 
-            padding: 0 16px; 
-        }
-        
-        .card { 
-            background: #0f0f23; 
-            border: 4px solid #e94560; 
-            border-radius: 0; 
-            box-shadow: 
-                0 0 0 2px #f39c12,
-                0 0 0 6px #e94560,
-                0 0 20px rgba(233, 69, 96, 0.3);
-            overflow: hidden; 
-            transform: translateY(8px); 
-            opacity: 0; 
-            animation: cardIn .6s ease-out forwards; 
-            position: relative;
-        }
-        
-        .card::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: linear-gradient(45deg, #e94560, #f39c12, #8e44ad, #e94560);
-            z-index: -1;
-            animation: borderGlow 3s ease-in-out infinite alternate;
-        }
-        
-        .card-header { 
-            padding: 20px; 
-            border-bottom: 4px solid #f39c12; 
-            background: linear-gradient(135deg, #e94560 0%, #c0392b 50%, #8e44ad 100%);
-            position: relative;
-        }
-        
-        .card-header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                repeating-linear-gradient(
-                    45deg,
-                    transparent,
-                    transparent 10px,
-                    rgba(255, 255, 255, 0.1) 10px,
-                    rgba(255, 255, 255, 0.1) 20px
-                );
-            pointer-events: none;
-        }
-        
-        .title { 
-            margin: 0; 
-            font-size: 1.2rem; 
-            color: #ffffff; 
-            font-weight: 700; 
-            text-shadow: 2px 2px 0px #2c3e50;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .card-body { 
-            padding: 30px; 
-            animation: fadeIn .6s ease .15s both; 
-            background: #0f0f23; 
-        }
-        
-        .form-group { 
-            margin-bottom: 24px; 
-        }
-        
-        label { 
-            display: block; 
-            margin-bottom: 12px; 
-            font-weight: 600; 
-            color: #f39c12; 
-            font-size: 0.7rem;
-            text-shadow: 1px 1px 0px #8e44ad;
-        }
-        
-        input[type="text"], input[type="email"] { 
-            width: 100%; 
-            max-width: 500px; 
-            padding: 16px; 
-            border: 3px solid #e94560; 
-            border-radius: 0; 
-            background: #2c3e50; 
-            color: #ecf0f1;
-            font-family: 'Press Start 2P', monospace;
-            font-size: 0.6rem;
-            transition: border-color .3s ease, box-shadow .3s ease, background-color .3s ease; 
-            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
-        }
-        
-        input[type="text"]:focus, input[type="email"]:focus { 
-            outline: none; 
-            border-color: #f39c12; 
-            box-shadow: 
-                inset 0 0 10px rgba(0, 0, 0, 0.5),
-                0 0 0 3px rgba(243, 156, 18, 0.3);
-            background: #34495e;
-        }
-        
-        .actions { 
-            display: flex; 
-            gap: 16px; 
-            margin-top: 24px; 
-        }
-        
-        .btn { 
-            display: inline-block; 
-            padding: 16px 24px; 
-            text-decoration: none; 
-            border-radius: 0; 
-            border: 3px solid #f39c12; 
-            font-size: 0.6rem; 
-            font-weight: 600; 
-            box-shadow: 0 4px 0px #8e44ad; 
-            transition: transform .08s ease, box-shadow .2s ease, background-color .2s ease; 
-            cursor: pointer; 
-            font-family: 'Press Start 2P', monospace;
-            text-shadow: 1px 1px 0px #2c3e50;
-        }
-        
-        .btn:active { 
-            transform: translateY(2px); 
-            box-shadow: 0 2px 0px #8e44ad; 
-        }
-        
-        .btn-primary { 
-            background: linear-gradient(135deg, #e94560 0%, #c0392b 100%); 
-            color: white; 
-            border-color: #f39c12; 
-        }
-        
-        .btn-primary:hover { 
-            background: linear-gradient(135deg, #c0392b 0%, #a93226 100%); 
-            transform: translateY(-2px);
-            box-shadow: 0 6px 0px #8e44ad;
-        }
-        
-        .btn-secondary { 
-            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%); 
-            color: #f39c12; 
-            border-color: #e94560; 
-        }
-        
-        .btn-secondary:hover { 
-            background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%); 
-            transform: translateY(-2px);
-            box-shadow: 0 6px 0px #8e44ad;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        @keyframes cardIn { 
-            to { 
-                transform: translateY(0); 
-                opacity: 1; 
-            } 
+        body {
+            background: #0a0a0a;
+            color: #e0e0e0;
+            font-family: "Inter", sans-serif;
+            min-height: 100vh;
+            line-height: 1.6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
         }
-        
-        @keyframes fadeIn { 
-            from { 
-                opacity: 0; 
-            } 
-            to { 
-                opacity: 1; 
-            } 
+
+        .container {
+            width: 100%;
+            max-width: 500px;
         }
-        
-        @keyframes borderGlow {
-            0% { opacity: 0.7; }
-            100% { opacity: 1; }
+
+        .card {
+            background: rgba(15, 15, 15, 0.9);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+        }
+
+        .card-header {
+            padding: 2rem 2rem 1rem;
+            text-align: center;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+            background: rgba(0, 255, 255, 0.02);
+        }
+
+        .card-title {
+            color: #ff0066;
+            font-family: "JetBrains Mono", monospace;
+            font-weight: 600;
+            font-size: 1.75rem;
+            text-shadow: 0 0 15px rgba(255, 0, 102, 0.5);
+            letter-spacing: 1px;
+            margin: 0;
+        }
+
+        .card-body {
+            padding: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group:last-of-type {
+            margin-bottom: 2rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #00ffff;
+            font-weight: 500;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input[type="text"],
+        input[type="email"] {
+            width: 100%;
+            padding: 1rem 1.25rem;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            background: rgba(10, 10, 10, 0.8);
+            color: #e0e0e0;
+            font-family: "Inter", sans-serif;
+            font-size: 1rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus {
+            border-color: #00ffff;
+            box-shadow: 0 0 0 2px rgba(0, 255, 255, 0.1), 0 0 15px rgba(0, 255, 255, 0.3);
+        }
+
+        input[type="text"]::placeholder,
+        input[type="email"]::placeholder {
+            color: rgba(224, 224, 224, 0.4);
+        }
+
+        .actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.875rem 2rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+            font-family: "Inter", sans-serif;
+            text-decoration: none;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            min-width: 140px;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background: rgba(0, 255, 255, 0.1);
+            color: #00ffff;
+            border: 1px solid rgba(0, 255, 255, 0.4);
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+        }
+
+        .btn-primary:hover {
+            background: rgba(0, 255, 255, 0.2);
+            border-color: #00ffff;
+            box-shadow: 0 0 25px rgba(0, 255, 255, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 0, 102, 0.1);
+            color: #ff0066;
+            border: 1px solid rgba(255, 0, 102, 0.4);
+            box-shadow: 0 0 15px rgba(255, 0, 102, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 0, 102, 0.2);
+            border-color: #ff0066;
+            box-shadow: 0 0 25px rgba(255, 0, 102, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .card-title {
+                font-size: 1.5rem;
+            }
+
+            .card-header,
+            .card-body {
+                padding: 1.5rem;
+            }
+
+            .actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .btn {
+                min-width: auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 0.5rem;
+            }
+
+            .card {
+                border-radius: 6px;
+            }
+
+            .card-header,
+            .card-body {
+                padding: 1rem;
+            }
+
+            .card-title {
+                font-size: 1.25rem;
+                letter-spacing: 0.5px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="terraria-bg"></div>
     <div class="container">
-    <div class="card">
-        <div class="card-header">
-            <h1 class="title">⚔️ Create Terraria Player</h1>
+        <div class="card">
+            <div class="card-header">
+                <h1 class="card-title">⚡ Create New Adventurer</h1>
+            </div>
+            <div class="card-body">
+                <form action="<?= site_url('users/create') ?>" method="POST">
+                    <div class="form-group">
+                        <label for="username">🏷️ Adventurer Name</label>
+                        <input type="text" name="username" id="username" required placeholder="Enter adventurer name">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">📬 Contact Crystal</label>
+                        <input type="email" name="email" id="email" required placeholder="Enter crystal frequency">
+                    </div>
+                    <div class="actions">
+                        <button type="submit" class="btn btn-primary">⚔️ Create Adventurer</button>
+                        <a href="<?= site_url('users/view') ?>" class="btn btn-secondary">⬅ Back to World</a>
+                    </div>
+                </form>
+            </div>
         </div>
-        <div class="card-body">
-            <form action="<?= site_url('users/create') ?>" method="POST">
-                <div class="form-group">
-                    <label for="username">👤 Username</label>
-                    <input type="text" name="username" id="username" required placeholder="Enter your Terraria character name">
-                </div>
-                <div class="form-group">
-                    <label for="email">📧 Email</label>
-                    <input type="email" name="email" id="email" required placeholder="Enter your email address">
-                </div>
-                <div class="actions">
-                    <button type="submit" class="btn btn-primary">⚔️ Create Player</button>
-                    <a href="<?= site_url('users/view') ?>" class="btn btn-secondary">🔙 Back to World</a>
-                </div>
-            </form>
-        </div>
-    </div>
     </div>
 </body>
 </html>

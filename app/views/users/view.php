@@ -1,304 +1,339 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Terraria Users - LavaLust</title>
+    <meta charset="UTF-8">
+    <title>Terraria Adventurers</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-        
-        * { 
-            box-sizing: border-box; 
-        }
-        
-        body { 
-            margin: 0; 
-            font-family: 'Press Start 2P', monospace; 
-            color: #e94560; 
-            background: #1a1a2e;
-            background-image: 
-                radial-gradient(circle at 20% 80%, #16213e 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, #0f3460 0%, transparent 50%),
-                radial-gradient(circle at 40% 40%, #533483 0%, transparent 50%);
-            image-rendering: pixelated;
-            image-rendering: -moz-crisp-edges;
-            image-rendering: crisp-edges;
-        }
-        
-        .terraria-bg { 
-            position: fixed; 
-            inset: 0; 
-            z-index: -1; 
-            pointer-events: none; 
-            background:
-                repeating-linear-gradient(
-                    0deg,
-                    transparent,
-                    transparent 2px,
-                    rgba(255, 255, 255, 0.03) 2px,
-                    rgba(255, 255, 255, 0.03) 4px
-                ),
-                repeating-linear-gradient(
-                    90deg,
-                    transparent,
-                    transparent 2px,
-                    rgba(255, 255, 255, 0.03) 2px,
-                    rgba(255, 255, 255, 0.03) 4px
-                );
-        }
-        
-        .container { 
-            max-width: 1000px; 
-            margin: 2rem auto; 
-            padding: 0 16px; 
-        }
-        
-        .card { 
-            background: #0f0f23; 
-            border: 4px solid #e94560; 
-            border-radius: 0; 
-            box-shadow: 
-                0 0 0 2px #f39c12,
-                0 0 0 6px #e94560,
-                0 0 20px rgba(233, 69, 96, 0.3);
-            overflow: hidden; 
-            transform: translateY(8px); 
-            opacity: 0; 
-            animation: cardIn .6s ease-out forwards; 
-            position: relative;
-        }
-        
-        .card::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: linear-gradient(45deg, #e94560, #f39c12, #8e44ad, #e94560);
-            z-index: -1;
-            animation: borderGlow 3s ease-in-out infinite alternate;
-        }
-        
-        .card-header { 
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between; 
-            padding: 20px; 
-            border-bottom: 4px solid #f39c12; 
-            background: linear-gradient(135deg, #e94560 0%, #c0392b 50%, #8e44ad 100%);
-            position: relative;
-        }
-        
-        .card-header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                repeating-linear-gradient(
-                    45deg,
-                    transparent,
-                    transparent 10px,
-                    rgba(255, 255, 255, 0.1) 10px,
-                    rgba(255, 255, 255, 0.1) 20px
-                );
-            pointer-events: none;
-        }
-        
-        .title { 
-            margin: 0; 
-            font-size: 1.2rem; 
-            color: #ffffff; 
-            font-weight: 700; 
-            text-shadow: 2px 2px 0px #2c3e50;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .actions { 
-            display: flex; 
-            gap: 12px; 
-            position: relative;
-            z-index: 1;
-        }
-        
-        .table-wrapper { 
-            overflow-x: auto; 
-            animation: fadeIn .6s ease .15s both; 
-            background: #0f0f23; 
-        }
-        
-        table { 
-            border-collapse: collapse; 
-            width: 100%; 
-        }
-        
-        th, td { 
-            border-bottom: 2px solid #e94560; 
-            padding: 16px; 
-            text-align: left; 
-        }
-        
-        th { 
-            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%); 
-            font-weight: 600; 
-            color: #f39c12; 
-            font-size: 0.7rem;
-            text-shadow: 1px 1px 0px #8e44ad;
-        }
-        
-        tr { 
-            transition: background .2s ease; 
-        }
-        
-        tr:hover td { 
-            background: #16213e; 
-        }
-        
-        td {
-            color: #ecf0f1;
-            font-size: 0.6rem;
-        }
-        
-        .btn { 
-            display: inline-block; 
-            padding: 12px 16px; 
-            text-decoration: none; 
-            border-radius: 0; 
-            border: 2px solid #f39c12; 
-            font-size: 0.6rem; 
-            font-weight: 600; 
-            box-shadow: 0 4px 0px #8e44ad; 
-            transition: transform .08s ease, box-shadow .2s ease, background-color .2s ease; 
-            cursor: pointer; 
-            font-family: 'Press Start 2P', monospace;
-            text-shadow: 1px 1px 0px #2c3e50;
-        }
-        
-        .btn:active { 
-            transform: translateY(2px); 
-            box-shadow: 0 2px 0px #8e44ad; 
-        }
-        
-        .btn-primary { 
-            background: linear-gradient(135deg, #e94560 0%, #c0392b 100%); 
-            color: white; 
-            border-color: #f39c12; 
-        }
-        
-        .btn-primary:hover { 
-            background: linear-gradient(135deg, #c0392b 0%, #a93226 100%); 
-            transform: translateY(-2px);
-            box-shadow: 0 6px 0px #8e44ad;
-        }
-        
-        .btn-edit { 
-            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%); 
-            color: white; 
-            border-color: #e94560; 
-        }
-        
-        .btn-edit:hover { 
-            background: linear-gradient(135deg, #e67e22 0%, #d35400 100%); 
-            transform: translateY(-2px);
-            box-shadow: 0 6px 0px #8e44ad;
-        }
-        
-        .btn-delete { 
-            background: linear-gradient(135deg, #8e44ad 0%, #9b59b6 100%); 
-            color: white; 
-            border-color: #e94560; 
-        }
-        
-        .btn-delete:hover { 
-            background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%); 
-            transform: translateY(-2px);
-            box-shadow: 0 6px 0px #8e44ad;
-        }
-        
-        .empty { 
-            padding: 40px; 
-            text-align: center; 
-            color: #8e44ad; 
-            font-style: italic; 
-            font-size: 0.7rem;
-        }
-        
-        .action-buttons { 
-            display: flex; 
-            gap: 8px; 
-            align-items: center; 
-        }
-        
-        .delete-form { 
-            display: inline; 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        @keyframes cardIn { 
-            to { 
-                transform: translateY(0); 
-                opacity: 1; 
-            } 
+        body {
+            background: #0a0a0a;
+            color: #e0e0e0;
+            font-family: "Inter", sans-serif;
+            min-height: 100vh;
+            line-height: 1.6;
         }
-        
-        @keyframes fadeIn { 
-            from { 
-                opacity: 0; 
-            } 
-            to { 
-                opacity: 1; 
-            } 
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
         }
-        
-        @keyframes borderGlow {
-            0% { opacity: 0.7; }
-            100% { opacity: 1; }
+
+        h1 {
+            text-align: center;
+            color: #ff0066;
+            margin-bottom: 3rem;
+            font-family: "JetBrains Mono", monospace;
+            font-weight: 600;
+            font-size: 2.5rem;
+            text-shadow: 0 0 15px rgba(255, 0, 102, 0.5);
+            letter-spacing: 2px;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            gap: 1rem;
+        }
+
+        .search-form {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .search-form input[type="text"] {
+            padding: 0.75rem 1rem;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            background: rgba(10, 10, 10, 0.8);
+            color: #e0e0e0;
+            font-family: "Inter", sans-serif;
+            font-size: 0.95rem;
+            border-radius: 6px;
+            width: 300px;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .search-form input[type="text"]:focus {
+            border-color: #00ffff;
+            box-shadow: 0 0 0 2px rgba(0, 255, 255, 0.1), 0 0 10px rgba(0, 255, 255, 0.3);
+        }
+
+        .search-form input[type="text"]::placeholder {
+            color: rgba(224, 224, 224, 0.5);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            font-family: "Inter", sans-serif;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: rgba(0, 255, 255, 0.1);
+            color: #00ffff;
+            border: 1px solid rgba(0, 255, 255, 0.4);
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
+        }
+
+        .btn-primary:hover {
+            background: rgba(0, 255, 255, 0.2);
+            border-color: #00ffff;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 0, 102, 0.1);
+            color: #ff0066;
+            border: 1px solid rgba(255, 0, 102, 0.4);
+            box-shadow: 0 0 10px rgba(255, 0, 102, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 0, 102, 0.2);
+            border-color: #ff0066;
+            box-shadow: 0 0 20px rgba(255, 0, 102, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .table-container {
+            background: rgba(15, 15, 15, 0.8);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: transparent;
+        }
+
+        table th {
+            background: rgba(0, 255, 255, 0.05);
+            color: #00ffff;
+            font-family: "JetBrains Mono", monospace;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 1.25rem 1.5rem;
+            text-align: left;
+            font-size: 0.85rem;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+        }
+
+        table td {
+            padding: 1.25rem 1.5rem;
+            color: #e0e0e0;
+            font-size: 0.95rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        table tbody tr:hover td {
+            background: rgba(0, 255, 255, 0.05);
+            border-color: rgba(0, 255, 255, 0.1);
+        }
+
+        table td a {
+            color: #00ffff;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+
+        table td a:hover {
+            color: #ff0066;
+            text-shadow: 0 0 8px rgba(255, 0, 102, 0.6);
+        }
+
+        .no-data {
+            text-align: center;
+            color: rgba(224, 224, 224, 0.6);
+            font-style: italic;
+            padding: 3rem 2rem;
+            font-size: 1.1rem;
+        }
+
+        .pagination {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .pagination a,
+        .pagination strong {
+            padding: 0.5rem 0.75rem;
+            font-size: 0.9rem;
+            text-decoration: none;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            background: rgba(0, 255, 255, 0.05);
+            color: #00ffff;
+            font-family: "JetBrains Mono", monospace;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .pagination a:hover {
+            background: rgba(0, 255, 255, 0.15);
+            border-color: #00ffff;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+        }
+
+        .pagination strong {
+            background: rgba(255, 0, 102, 0.15);
+            border-color: #ff0066;
+            color: #ff0066;
+            box-shadow: 0 0 10px rgba(255, 0, 102, 0.3);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+                margin-bottom: 2rem;
+            }
+            
+            .actions {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 1rem;
+            }
+            
+            .search-form {
+                justify-content: center;
+            }
+
+            .search-form input[type="text"] {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            table th,
+            table td {
+                padding: 0.75rem;
+                font-size: 0.85rem;
+            }
+
+            table th {
+                font-size: 0.75rem;
+            }
+
+            table td a {
+                font-size: 0.75rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .table-container {
+                margin: 0 -1rem;
+                border-radius: 0;
+                border-left: none;
+                border-right: none;
+            }
+
+            table th:first-child,
+            table td:first-child {
+                padding-left: 1rem;
+            }
+
+            table th:last-child,
+            table td:last-child {
+                padding-right: 1rem;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="terraria-bg"></div>
     <div class="container">
-    <div class="card">
-    <div class="card-header">
-        <h1 class="title">👥 Terraria Players</h1>
+        <h1>Terraria Players</h1>
+
         <div class="actions">
-            <a href="<?= site_url('users/create') ?>" class="btn btn-primary">⚔️ Create Player</a>
+            <form method="get" action="<?= site_url('users/view'); ?>" class="search-form">
+                <input type="text" name="q"
+                       value="<?= isset($_GET['q']) ? htmlspecialchars($_GET['q']) : '' ?>"
+                       placeholder="Search users...">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+
+            <?php if (!empty($_GET['q'])): ?>
+                <a href="<?= site_url('users/view'); ?>" class="btn btn-secondary">Back</a>
+            <?php else: ?>
+                <a href="<?= site_url('users/create'); ?>" class="btn btn-primary">New Player</a>
+            <?php endif; ?>
         </div>
-    </div>
-    <div class="table-wrapper">
-    <table>
-        <tr>
-            <th>🆔 ID</th>
-            <th>👤 Username</th>
-            <th>📧 Email</th>
-            <th>⚡ Actions</th>
-        </tr>
-        <?php if (!empty($users)): ?>
-            <?php foreach($users as $user): ?>
-            <tr>
-                <td><?= $user['id'] ?></td>
-                <td><?= $user['username'] ?></td>
-                <td><?= $user['email'] ?></td>
-                <td>
-                    <div class="action-buttons">
-                        <a href="<?= site_url('users/update/' . $user['id']) ?>" class="btn btn-edit">🔧 Edit</a>
-                        
-                        <!-- Navigate to delete confirmation page -->
-                        <a href="<?= site_url('users/delete/' . $user['id']) ?>" class="btn btn-delete">🗑️ Delete</a>
-                    </div>
-                </td>
-            </tr>
-            <?php endforeach; ?>
-        <?php else: ?>
-            <tr>
-                <td colspan="4" class="empty">No Terraria players found in this world!</td>
-            </tr>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (!empty($users)): ?>
+                        <?php foreach ($users as $user): ?>
+                            <tr>
+                                <td><?= htmlspecialchars($user['id']); ?></td>
+                                <td><?= htmlspecialchars($user['username']); ?></td>
+                                <td><?= htmlspecialchars($user['email']); ?></td>
+                                <td>
+                                    <a href="<?= site_url('users/update/' . $user['id']); ?>">Edit</a>
+                                    <span style="color: rgba(224, 224, 224, 0.3); margin: 0 0.5rem;">|</span>
+                                    <a href="<?= site_url('users/delete/' . $user['id']); ?>">Delete</a>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr>
+                            <td colspan="4" class="no-data">No adventurers found in this world 🌍</td>
+                        </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+
+        <?php if (!empty($page)): ?>
+            <div class="pagination">
+                <?= $page; ?>
+            </div>
         <?php endif; ?>
-    </table>
-    </div>
-    </div>
     </div>
 </body>
 </html>
