@@ -225,6 +225,9 @@
                     <div class="user-details" style="font-size: 0.9rem; opacity: 0.8;">
                         📬 <?= htmlspecialchars($user['email']); ?>
                     </div>
+                    <div class="user-details" style="font-size: 0.9rem; opacity: 0.8;">
+                        🧪 Class: <?= htmlspecialchars($user['class']); ?>
+                    </div>
                     <div class="warning-note">
                         This action cannot be undone. The adventurer will be lost forever.
                     </div>

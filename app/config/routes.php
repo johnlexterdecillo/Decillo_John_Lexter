@@ -43,7 +43,19 @@ defined('PREVENT_DIRECT_ACCESS') OR exit('No direct script access allowed');
 |
 */
 
-$router->get('', 'UserController::view');
+// Authentication Routes
+$router->match('/auth/login', 'AuthController::login', ['GET', 'POST']);
+$router->match('/auth/register', 'AuthController::register', ['GET', 'POST']);
+$router->get('/auth/logout', 'AuthController::logout');
+$router->get('/auth/unauthorized', 'AuthController::unauthorized');
+$router->get('/auth/profile', 'AuthController::profile');
+$router->match('/auth/change_password', 'AuthController::change_password', ['GET', 'POST']);
+
+// Dashboard (Protected by authentication)
+$router->get('', 'DashboardController::index');
+$router->get('/dashboard', 'DashboardController::index');
+
+// User Management Routes (Protected by authentication)
 $router->get('/users/view', 'UserController::view');
 $router->match('/users/create', 'UserController::create', ['GET', 'POST']);
 $router->match('/users/update/{id}', 'UserController::update', ['GET', 'POST']);

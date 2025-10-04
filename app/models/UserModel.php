@@ -4,10 +4,17 @@ defined('PREVENT_DIRECT_ACCESS') OR exit('No direct script access allowed');
 class UserModel extends Model {
     protected $table = 'users';
     protected $primary_key = 'id';
-    protected $allowed_fields = ['username', 'email'];
+
+    // ✅ Allow class, avatar, password, and role
+    protected $allowed_fields = ['username', 'email', 'class', 'avatar', 'password', 'role'];
+
     protected $validation_rules = [
         'username' => 'required|min_length[3]|max_length[100]',
-        'email'    => 'required|valid_email|max_length[150]'
+        'email'    => 'required|valid_email|max_length[150]',
+        'class'    => 'permit_empty|min_length[1]|max_length[50]',
+        'avatar'   => 'permit_empty', // allow no file uploaded
+        'password' => 'permit_empty|min_length[6]', // required only on registration
+        'role'     => 'permit_empty' // default to 'user' if not provided
     ];
 
     public function __construct()
@@ -28,7 +35,8 @@ class UserModel extends Model {
 
             if (!empty($q)) {
                 $query->like('username', '%'.$q.'%')
-                      ->or_like('email', '%'.$q.'%');
+                      ->or_like('email', '%'.$q.'%')
+                      ->or_like('class', '%'.$q.'%');
             }
 
             // count total rows

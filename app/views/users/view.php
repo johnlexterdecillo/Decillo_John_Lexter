@@ -275,24 +275,134 @@
                 padding-right: 1rem;
             }
         }
+
+        /* Navigation Bar */
+        .navbar {
+            background: rgba(15, 15, 15, 0.95);
+            border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .navbar-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-brand {
+            font-family: "JetBrains Mono", monospace;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #ff0066;
+            text-shadow: 0 0 15px rgba(255, 0, 102, 0.5);
+            text-decoration: none;
+        }
+
+        .navbar-menu {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .navbar-menu a {
+            color: #00ffff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .navbar-menu a:hover {
+            color: #ff0066;
+            text-shadow: 0 0 8px rgba(255, 0, 102, 0.6);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding-left: 2rem;
+            border-left: 1px solid rgba(0, 255, 255, 0.2);
+        }
+
+        .user-info .username {
+            font-family: "JetBrains Mono", monospace;
+            font-weight: 500;
+            color: #00ffff;
+        }
+
+        .user-info .role-badge {
+            background: rgba(255, 215, 0, 0.2);
+            color: #ffd700;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: 1px solid rgba(255, 215, 0, 0.4);
+        }
     </style>
 </head>
 <body>
+    <?php
+    // current_user is provided by controller: $data['current_user']
+    $current_user = isset($current_user) ? $current_user : null;
+    ?>
+    
+    <nav class="navbar">
+        <div class="navbar-content">
+            <a href="<?= site_url('dashboard') ?>" class="navbar-brand">⚔️ TERRARIA</a>
+            
+            <div class="navbar-menu">
+                <a href="<?= site_url('dashboard') ?>">📊 Dashboard</a>
+                <a href="<?= site_url('users/view') ?>">👥 Users</a>
+                <?php if ($current_user && $current_user['role'] === 'admin'): ?>
+                    <a href="<?= site_url('users/create') ?>">➕ New User</a>
+                <?php endif; ?>
+                
+                <div class="user-info">
+                    <span>👤</span>
+                    <span class="username"><?= htmlspecialchars($current_user['username'] ?? 'Guest') ?></span>
+                    <?php if (!empty($current_user['role']) && $current_user['role'] === 'admin'): ?>
+                        <span class="role-badge">Admin</span>
+                    <?php endif; ?>
+                    <a href="<?= site_url('auth/profile') ?>">⚙️</a>
+                    <a href="<?= site_url('auth/logout') ?>">🚪 Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
     <div class="container">
-        <h1>Terraria Players</h1>
+        <h1>🌍 Terraria Adventurers</h1>
 
         <div class="actions">
             <form method="get" action="<?= site_url('users/view'); ?>" class="search-form">
-                <input type="text" name="q"
+                <input type="text" name="q" 
                        value="<?= isset($_GET['q']) ? htmlspecialchars($_GET['q']) : '' ?>"
-                       placeholder="Search users...">
+                       placeholder="🔍 Search adventurers...">
                 <button type="submit" class="btn btn-primary">Search</button>
             </form>
 
             <?php if (!empty($_GET['q'])): ?>
-                <a href="<?= site_url('users/view'); ?>" class="btn btn-secondary">Back</a>
+                <a href="<?= site_url('users/view'); ?>" class="btn btn-secondary">
+                    ⬅️ Show All
+                </a>
             <?php else: ?>
-                <a href="<?= site_url('users/create'); ?>" class="btn btn-primary">New Player</a>
+                <a href="<?= site_url('users/create'); ?>" class="btn btn-primary">
+                    ⚡ New Adventurer
+                </a>
             <?php endif; ?>
         </div>
 
@@ -301,8 +411,10 @@
                 <thead>
                     <tr>
                         <th>ID</th>
+                        <th>Avatar</th>
                         <th>Username</th>
                         <th>Email</th>
+                        <th>Class</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -310,24 +422,57 @@
                     <?php if (!empty($users)): ?>
                         <?php foreach ($users as $user): ?>
                             <tr>
-                                <td><?= htmlspecialchars($user['id']); ?></td>
-                                <td><?= htmlspecialchars($user['username']); ?></td>
+                                <td><strong>#<?= htmlspecialchars($user['id']); ?></strong></td>
+                                <td>
+                                    <?php if (!empty($user['avatar'])): ?>
+                                        <img src="<?= base_url('public/avatars/' . $user['avatar']); ?>" 
+                                             alt="<?= htmlspecialchars($user['username']); ?>" 
+                                             class="avatar"
+                                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                        <div class="no-avatar" style="display:none;">
+                                            <?= strtoupper(substr($user['username'], 0, 1)); ?>
+                                        </div>
+                                    <?php else: ?>
+                                        <div class="no-avatar">
+                                            <?= strtoupper(substr($user['username'], 0, 1)); ?>
+                                        </div>
+                                    <?php endif; ?>
+                                </td>
+                                <td><strong><?= htmlspecialchars($user['username']); ?></strong></td>
                                 <td><?= htmlspecialchars($user['email']); ?></td>
                                 <td>
-                                    <a href="<?= site_url('users/update/' . $user['id']); ?>">Edit</a>
-                                    <span style="color: rgba(224, 224, 224, 0.3); margin: 0 0.5rem;">|</span>
-                                    <a href="<?= site_url('users/delete/' . $user['id']); ?>">Delete</a>
+                                    <?php if (isset($user['class']) && !empty($user['class'])): ?>
+                                        <span class="class-badge"><?= htmlspecialchars($user['class']); ?></span>
+                                    <?php else: ?>
+                                        <span style="color: rgba(255,255,255,0.5);">—</span>
+                                    <?php endif; ?>
+                                </td>
+                                <td class="action-links">
+                                    <a href="<?= site_url('users/update/' . $user['id']); ?>">
+                                        ✏️ Edit
+                                    </a>
+                                    <a href="<?= site_url('users/delete/' . $user['id']); ?>" 
+                                       class="delete"
+                                       onclick="return confirm('⚠️ Are you sure you want to remove <?= htmlspecialchars($user['username']); ?> from the world? This cannot be undone!');">
+                                        🗑️ Delete
+                                    </a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
                     <?php else: ?>
                         <tr>
-                            <td colspan="4" class="no-data">No adventurers found in this world 🌍</td>
+                            <td colspan="6" class="no-data">
+                                🌌 No adventurers found in this world
+                                <?php if (!empty($_GET['q'])): ?>
+                                    <br><small>Try a different search term</small>
+                                <?php endif; ?>
+                            </td>
                         </tr>
                     <?php endif; ?>
                 </tbody>
             </table>
         </div>
+
 
         <?php if (!empty($page)): ?>
             <div class="pagination">

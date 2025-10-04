@@ -6,31 +6,26 @@ class UserController extends Controller {
     {
         parent::__construct();
         $this->call->model('UserModel');
-        $this->call->library('pagination'); // ✅ add pagination library
+        $this->call->library('pagination');
+        $this->call->library('auth');
+        
+        // Require authentication for all user operations
+        $this->auth->require_auth();
     }
 
     public function view()
     {
-        // Current page
-        $page = 1;
-        if (isset($_GET['page']) && !empty($_GET['page'])) {
-            $page = $this->io->get('page');
-        }
-
-        // Search query
-        $q = '';
-        if (isset($_GET['q']) && !empty($_GET['q'])) {
-            $q = trim($this->io->get('q'));
-        }
+        $page = isset($_GET['page']) ? (int)$this->io->get('page') : 1;
+        $q = isset($_GET['q']) ? trim($this->io->get('q')) : '';
 
         $records_per_page = 5;
-
-        // ✅ Use the page() method from your UserModel
         $all = $this->UserModel->page($q, $records_per_page, $page);
         $data['users'] = $all['records'];
         $total_rows = $all['total_rows'];
 
-        // ✅ Pagination setup
+        // Provide current user info to the view (avoid using $this->session in views)
+        $data['current_user'] = $this->auth->user();
+
         $this->pagination->set_options([
             'first_link'     => '⏮ First',
             'last_link'      => 'Last ⏭',
@@ -38,7 +33,7 @@ class UserController extends Controller {
             'prev_link'      => '← Prev',
             'page_delimiter' => '&page='
         ]);
-        $this->pagination->set_theme('default'); // keep default first
+        $this->pagination->set_theme('default');
         $this->pagination->initialize(
             $total_rows,
             $records_per_page,
@@ -55,10 +50,12 @@ class UserController extends Controller {
         if ($this->io->method() === 'post') {
             $username = $this->io->post('username');
             $email = $this->io->post('email');
+            $class = $this->io->post('class');
 
             $data = [
                 'username' => $username,
-                'email' => $email
+                'email'    => $email,
+                'class'    => $class
             ];
 
             try {
@@ -77,10 +74,12 @@ class UserController extends Controller {
         if ($this->io->method() === 'post') {
             $username = $this->io->post('username');
             $email = $this->io->post('email');
+            $class = $this->io->post('class');
 
             $data = [
                 'username' => $username,
-                'email' => $email
+                'email'    => $email,
+                'class'    => $class
             ];
 
             try {
@@ -97,20 +96,20 @@ class UserController extends Controller {
 
     public function delete($id)
     {
+        // Only admins can delete users
+        $this->auth->require_admin();
+
         if ($this->io->method() === 'post') {
             try {
-                if ($this->UserModel->delete($id)) {
-                    redirect('users/view');
-                } else {
-                    echo 'Something went wrong while deleting user';
-                }
+                $this->UserModel->delete($id);
+                redirect('users/view');
             } catch (Exception $e) {
                 echo 'Something went wrong while deleting user: ' . htmlspecialchars($e->getMessage());
             }
         } else {
             $data['user'] = $this->UserModel->find($id);
             if (!$data['user']) {
-                echo 'User not found';
+                redirect('users/view');
                 return;
             }
             $this->call->view('users/delete', $data);
